@@ -5,6 +5,7 @@ import pandas as pd
 import pytest
 
 from src.analysis import filter_dates, insights, patterns, prepare, relationship, spikes, summary
+from src.analysis import daily_market, demand_bands, monthly_spikes, price_duration
 
 
 @pytest.fixture
@@ -47,3 +48,34 @@ def test_empty_data(sample):
     assert summary(empty)["spike_percent"] == 0
     assert insights(empty) == []
     assert np.isnan(relationship(empty)[0])
+
+
+def test_demand_bands_preserve_ties_and_denominators(sample):
+    repeated = pd.concat([sample, sample], ignore_index=True)
+    bands = demand_bands(repeated)
+    assert bands.hours.sum() == len(repeated)
+    assert (bands.hours % 2 == 0).all()
+    weighted_spikes = (bands.spike_percent * bands.hours / 100).sum()
+    assert weighted_spikes == 2
+    constant = demand_bands(sample.assign(ail_mw=100))
+    assert len(constant) == 1
+    assert constant.iloc[0].spike_percent == 25
+    assert demand_bands(sample.iloc[:0]).empty
+
+
+def test_monthly_spikes_use_observed_hours(sample):
+    result = monthly_spikes(sample)
+    assert result.iloc[0].hours == 4
+    assert result.iloc[0].spikes == 1
+    assert result.iloc[0].percent == 25
+
+
+def test_daily_averages_and_price_duration(sample):
+    daily = daily_market(sample)
+    assert daily.iloc[0]['mean'] == 375
+    assert daily.iloc[0]['rolling'] == 375
+    assert daily.iloc[0]['low'] == 0
+    assert daily.iloc[0]['high'] == 750
+    duration = price_duration(sample)
+    assert duration.pool_price_cad_mwh.tolist() == [750, 500, 250, 0]
+    assert duration.share.tolist() == [25, 50, 75, 100]

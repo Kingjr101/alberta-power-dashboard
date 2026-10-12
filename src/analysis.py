@@ -45,6 +45,48 @@ def spikes(data, threshold=500):
     return data.loc[data.pool_price_cad_mwh > threshold].sort_values("pool_price_cad_mwh", ascending=False).copy()
 
 
+def daily_market(data):
+    """Daily means and observed hourly range; rolling mean uses up to seven days."""
+    daily = data.groupby("date", as_index=False).agg(
+        mean=("pool_price_cad_mwh", "mean"), low=("pool_price_cad_mwh", "min"),
+        high=("pool_price_cad_mwh", "max"), load=("ail_mw", "mean"))
+    daily["rolling"] = daily["mean"].rolling(7, min_periods=1).mean()
+    return daily
+
+
+def demand_bands(data):
+    """Up to five quantile bands; ties stay together, so counts can differ."""
+    columns = ["band", "load_min", "load_max", "hours", "mean", "median", "spike_percent"]
+    if data.empty:
+        return pd.DataFrame(columns=columns)
+    frame = data.copy()
+    frame["band"] = (0 if frame.ail_mw.nunique() == 1 else
+                     pd.qcut(frame.ail_mw, 5, labels=False, duplicates="drop"))
+    frame["spike"] = frame.pool_price_cad_mwh > 500
+    result = frame.groupby("band", as_index=False).agg(
+        load_min=("ail_mw", "min"), load_max=("ail_mw", "max"),
+        hours=("ail_mw", "size"), mean=("pool_price_cad_mwh", "mean"),
+        median=("pool_price_cad_mwh", "median"), spike_percent=("spike", "mean"))
+    result["spike_percent"] *= 100
+    result["band"] = [f"Band {i + 1}" for i in range(len(result))]
+    return result[columns]
+
+
+def monthly_spikes(data):
+    frame = data.assign(period=pd.to_datetime(data.date).dt.to_period("M").astype(str),
+                        spike=data.pool_price_cad_mwh > 500)
+    result = frame.groupby("period", as_index=False).agg(hours=("spike", "size"), spikes=("spike", "sum"))
+    result["percent"] = result.spikes / result.hours * 100
+    return result
+
+
+def price_duration(data):
+    """Descending hourly prices with cumulative share of observed hours."""
+    result = data[["pool_price_cad_mwh"]].sort_values("pool_price_cad_mwh", ascending=False).reset_index(drop=True)
+    result["share"] = np.arange(1, len(result) + 1) / max(len(result), 1) * 100
+    return result
+
+
 def insights(data):
     if data.empty:
         return []
