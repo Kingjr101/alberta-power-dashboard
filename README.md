@@ -2,7 +2,7 @@
 
 A small energy analytics portfolio project exploring how Alberta's wholesale electricity pool price moves with demand. It uses **17,544 real hourly AESO observations from January 1, 2024 through December 31, 2025**, with a reproducible download pipeline, pure Pandas analysis functions, and an interactive Streamlit dashboard. Explore price statistics, price versus actual Alberta Internal Load (AIL), seasonal and hourly patterns, and hours above $500/MWh. Prices are in Canadian dollars per MWh; load is in MW.
 
-**Live app:** Deployment pending on Streamlit Community Cloud.
+**Live app:** [Explore Alberta Power](https://alberta-power-dashboard-sutzbuzgfe2iinbhazdtpt.streamlit.app/)
 
 ![Alberta Power Dashboard showing price statistics and computed findings](docs/dashboard.png)
 
@@ -10,10 +10,12 @@ A small energy analytics portfolio project exploring how Alberta's wholesale ele
 
 Across the complete 2024–2025 snapshot:
 
-- Average pool price was **$53.24/MWh**, with a minimum of **$0.00** and maximum of **$999.99/MWh**.
+- Average pool price was **$53.24/MWh** and the median was **$26.74/MWh**, with a minimum of **$0.00** and maximum of **$999.99/MWh**.
 - The hour beginning **19:00 Alberta time** had the highest average price, **$109.73/MWh**. January had the highest pooled monthly average, **$91.57/MWh**.
 - **333 hours (1.90%)** exceeded **$500/MWh**.
 - Hourly price and actual load had a Pearson correlation of **0.199**: a weak positive linear association, not a causal relationship or a forecasting model.
+
+The highest-demand quantile band (10,937 to 12,785 MW) had **4.68%** of hours above $500/MWh, compared with **0.11%** in the lowest band (8,166 to 9,487 MW). These bands are defined from the full snapshot and recalculate with the date filter.
 
 Findings are descriptive of this period, and update in the app when the date range changes. Supply outages, fuel costs, imports, renewable generation and market changes are not controlled for. Wholesale prices are not retail bills.
 
@@ -35,7 +37,7 @@ pytest
 streamlit run app.py
 ```
 
-The committed CSV makes the app work immediately, without an API key or a live AESO connection. The sidebar date filter applies to all four pages and the CSV download. Streamlit's sidebar collapses on narrow screens.
+The committed CSV makes the app work immediately, without an API key or a live AESO connection. The sidebar date filter applies to all four pages and the CSV download. The overview pairs price and load timelines with a price distribution; the demand page compares average prices, median prices and spike frequency across demand quantiles; patterns separate monthly prices by year; and the spikes page includes monthly percentages and a price-duration curve. Streamlit's sidebar collapses on narrow screens.
 
 ## Refresh data
 
@@ -71,7 +73,7 @@ Independent student project; not affiliated with or endorsed by AESO. Source dat
 2. Click **Create app → Yup, I have an app**.
 3. Choose repository `Kingjr101/alberta-power-dashboard`, branch `main`, and file `app.py`.
 4. Choose an available app URL; in Advanced settings use Python 3.14 (or 3.12+). No secrets are needed because the dashboard reads the committed CSV.
-5. Click **Deploy**, confirm the app is public, and replace the pending live link above with the assigned URL.
+5. Click **Deploy** and confirm the app is public. The deployed app automatically updates after pushes to `main`.
 
 ## Project layout
 
@@ -79,8 +81,14 @@ Independent student project; not affiliated with or endorsed by AESO. Source dat
 app.py                 Streamlit pages and Plotly charts
 src/fetch.py           AESO download, cleaning and completeness checks
 src/analysis.py        Pure analysis functions
+src/charts.py          Plotly figure builders and shared chart styling
+assets/style.css       Responsive dashboard styling
 data/hourly.csv        Committed hourly snapshot
 data/metadata.json     Source, retrieval time, coverage and checksum
 tests/                 Analysis and data-validation tests
 docs/dashboard.png    Actual local dashboard screenshot
 ```
+
+## Design references
+
+The visual refresh uses Plotly from the [Awesome Dataviz](https://github.com/hal9ai/awesome-dataviz) catalog. The locally installed [Taste skill](https://github.com/Leonxlnx/taste-skill) informed the introductory presentation; its current version excludes dashboards, so the analytical interface stays native to Streamlit. See [design notes](docs/design.md) for chart choices and scope. No Node.js or frontend skill package is needed to run the app.
