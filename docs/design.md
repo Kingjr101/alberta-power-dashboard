@@ -1,6 +1,6 @@
 # Dashboard design notes
 
-This is an analytical portfolio project for energy internship recruiters. The redesign keeps the Python / Streamlit / Plotly stack and the four original pages, with a light surface, a consistent teal accent, dark text, and amber reserved for price spikes and highlighted observations. Motion is limited to normal control feedback; the data stays still while readers inspect it.
+This is an analytical portfolio project for energy internship recruiters. The redesign keeps the Python / Streamlit / Plotly stack and the four original pages, with a light surface, a consistent plum accent, dark text, and orange reserved for price spikes and highlighted observations. Motion is limited to normal control feedback; the data stays still while readers inspect it.
 
 ## References and scope
 
@@ -25,6 +25,10 @@ Validation: pytest includes pure-analysis cases, data integrity checks and a rea
 
 The “Behind the average” comparison follows the hierarchy and semantic-colour principles in [Impeccable's colorize guidance](https://github.com/pbakaus/impeccable/blob/main/skill/reference/colorize.md). Impeccable is used as a design reference, not a runtime component library. The original Streamlit stack is preserved.
 
-Cool teal identifies the median or non-spike comparison; ink represents the overall average in the typical-price view. Warm amber, a contrasting hue, is restricted to the overall-average bar when discussing spike influence. Diagonal stripes, direct labels and numerical values provide redundant cues. Colour indicates which quantity is being discussed, not whether a price is morally “good” or “bad.” Muted green surfaces group the comparison with low visual noise, while dark text carries the explanation.
+Cool plum identifies the median or non-spike comparison; ink represents the overall average in the typical-price view. Warm orange, a contrasting hue, is restricted to the overall-average bar when discussing spike influence. Diagonal stripes, direct labels and numerical values provide redundant cues. Colour indicates which quantity is being discussed, not whether a price is morally “good” or “bad.” Pale lavender surfaces group the comparison with low visual noise, while dark text carries the explanation.
 
 The two bars have a shared zero baseline and scale. Every number updates with the date filter. Excluding hours strictly above $500/MWh is labelled as a descriptive calculation, not a counterfactual. No-spike and all-spike selections have explicit text states. Native radio controls support keyboard use; the comparison becomes a single column on phones. The component has no animation or new external dependencies.
+
+## User-selected purple-to-orange palette
+
+The six supplied colours are `#2b1f5c`, `#6d236f`, `#ab256e`, `#dd3e5d`, `#fb6d3e`, and `#ffa600`. Deep purple anchors text and trend lines; plum identifies primary controls and price series. The full ordered ramp encodes increasing prices in the distribution and heatmap, with the scale explicitly labelled. Pale lavender neutrals provide background separation without competing with the data. Orange spike marks have dark outlines or stripes, and scatter spikes use diamonds, so the low contrast of orange against white does not erase boundaries or make colour the only signal. Small text remains dark purple or muted purple, never orange on white.

@@ -1,4 +1,4 @@
-﻿"""Run with: streamlit run app.py."""
+"""Run with: streamlit run app.py."""
 import calendar
 from html import escape
 import json
@@ -122,7 +122,7 @@ elif page == "Price vs. load":
     c.metric("Highest demand band · avg price", f"${last['mean']:,.2f}")
     with st.container(border=True):
         st.subheader("Does higher demand mean higher prices?")
-        st.caption("One dot per hour. Price spikes are highlighted in amber; the line is an ordinary least-squares fit.")
+        st.caption("One dot per hour. Price spikes are highlighted with orange diamonds; the line is an ordinary least-squares fit.")
         chart(charts.price_load(selected), "price_load")
     left, right = st.columns(2, gap="large")
     with left, st.container(border=True):
@@ -153,7 +153,7 @@ elif page == "Patterns":
         chart(charts.monthly_profile(selected), "monthly_profile")
     with st.container(border=True):
         st.subheader("When expensive hours cluster")
-        st.caption("Average pool price by month and hour. Darker cells indicate higher prices.")
+        st.caption("Average pool price by month and hour. Colour moves from deep purple at lower prices to orange at higher prices.")
         chart(charts.season_heatmap(selected), "season_heatmap")
     st.caption("The heatmap and hourly profile pool all selected years. Blank cells mean no observations. Partial months include only selected dates. Both repeated autumn hours count; the skipped spring hour has no observation.")
 
@@ -178,7 +178,7 @@ else:
         with st.container(border=True):
             st.subheader("Where spikes happened")
             fig = go.Figure(go.Scatter(x=events.timestamp_utc, y=events.pool_price_cad_mwh, mode="markers",
-                marker=dict(color=charts.AMBER, size=6, opacity=.7), customdata=events[["timestamp_alberta", "ail_mw"]],
+                marker=dict(color=charts.SPIKE, size=6, opacity=.95, symbol="diamond", line=dict(color=charts.INK, width=.7)), customdata=events[["timestamp_alberta", "ail_mw"]],
                 hovertemplate="%{customdata[0]}<br>$%{y:.2f}/MWh · %{customdata[1]:,.0f} MW<extra></extra>"))
             fig.update_xaxes(title="Time (UTC; hover for Alberta time)")
             fig.update_yaxes(title="Price (CAD/MWh)")
