@@ -92,3 +92,5 @@ docs/dashboard.png    Actual local dashboard screenshot
 ## Design references
 
 The visual refresh uses Plotly from the [Awesome Dataviz](https://github.com/hal9ai/awesome-dataviz) catalog. The locally installed [Taste skill](https://github.com/Leonxlnx/taste-skill) informed the introductory presentation; its current version excludes dashboards, so the analytical interface stays native to Streamlit. See [design notes](docs/design.md) for chart choices and scope. No Node.js or frontend skill package is needed to run the app.
+
+The overview's interactive **Behind the average** component applies [Impeccable's colour guidance](https://github.com/pbakaus/impeccable/blob/main/skill/reference/colorize.md): teal for the comparison, restrained amber for spike influence, and direct labels plus a stripe pattern so meaning does not rely on colour alone. Switch between median-versus-average and the average excluding hours above $500/MWh. In the full snapshot, excluding those 333 observed hours yields an average of **$39.42/MWh** across the remaining 17,211 hours. This is a descriptive subset calculation, not a counterfactual market forecast.
