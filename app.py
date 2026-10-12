@@ -59,7 +59,7 @@ if page == "Overview":
     chart(px.line(daily, x="date", y="price", labels={"date": "Date", "price": "Daily average price (CAD/MWh)"}))
     st.subheader("What I found")
     for finding in insights(selected):
-        st.markdown(f"- {finding}")
+        st.markdown("- " + finding.replace("$", r"\$"))
     st.caption("Findings update with the date filter. Demand alone does not explain prices; generation availability, fuel costs and imports also matter.")
 elif page == "Price vs. load":
     correlation, line = relationship(selected)
