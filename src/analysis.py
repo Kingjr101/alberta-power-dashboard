@@ -45,6 +45,16 @@ def spikes(data, threshold=500):
     return data.loc[data.pool_price_cad_mwh > threshold].sort_values("pool_price_cad_mwh", ascending=False).copy()
 
 
+def price_story(data, threshold=500):
+    """Descriptive comparisons, never a counterfactual price estimate."""
+    prices = data.pool_price_cad_mwh
+    ordinary = prices.loc[prices <= threshold]
+    return {"mean": prices.mean(), "median": prices.median(),
+            "without_spikes": ordinary.mean(), "ordinary_hours": len(ordinary),
+            "spike_hours": int((prices > threshold).sum()), "hours": len(prices),
+            "spike_percent": float((prices > threshold).mean() * 100) if len(prices) else 0.0}
+
+
 def daily_market(data):
     """Daily means and observed hourly range; rolling mean uses up to seven days."""
     daily = data.groupby("date", as_index=False).agg(

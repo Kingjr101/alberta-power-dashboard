@@ -10,6 +10,7 @@ import streamlit as st
 
 from src.analysis import demand_bands, filter_dates, patterns, prepare, relationship, spikes, summary
 from src import charts
+from src.story import overview_story
 
 ROOT = Path(__file__).resolve().parent
 st.set_page_config(page_title="Alberta Power | Price & Demand", page_icon=":material/bolt:", layout="wide")
@@ -80,6 +81,12 @@ if page == "Overview":
             ["Arithmetic mean of selected hourly prices.", "Half the selected hours cost less than this price.",
              "Highest selected hourly price.", "Lowest selected hourly price."]):
         column.metric(label, f"${value:,.2f}", help=help_text + " CAD/MWh.")
+
+    with st.container(key="overview-story"):
+        st.subheader("Behind the average")
+        lens = st.radio("Choose a comparison", ["Typical prices", "Spike influence"],
+                        horizontal=True, key="story_lens")
+        st.html(overview_story(selected, lens))
 
     left, right = st.columns([2.1, 1], gap="large")
     with left, st.container(border=True):

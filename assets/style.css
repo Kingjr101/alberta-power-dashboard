@@ -1,5 +1,5 @@
 /* Streamlit-native presentation; no external fonts or JavaScript dependencies. */
-:root { --ink: #203d45; --accent: #087f73; --muted: #60777c; --line: #dbe7e2; }
+:root { --ink: #203d45; --accent: #087f73; --muted: #50686d; --line: #dbe7e2; --spike: #a84e1c; }
 .stApp { background: #f6f9f7; }
 [data-testid="stHeader"] { background: rgba(246,249,247,.96); }
 [data-testid="stMainBlockContainer"] { max-width: 1500px; padding-top: 3.8rem; padding-bottom: 2rem; }
@@ -27,10 +27,28 @@ h3 { font-size: 1.15rem !important; }
 .note h4 { margin: 0 0 .3rem; font-size: .94rem; color: var(--ink); }
 .note p { margin: 0; color: var(--muted); line-height: 1.6; font-size: .86rem; }
 .stButton button, .stDownloadButton button, .stLinkButton a { border-radius: 8px; }
+.st-key-overview-story { border-top: 2px solid var(--accent); padding: 1.25rem 0 1.5rem; margin: .5rem 0; }
+.price-story { display: grid; grid-template-columns: 1fr 1.15fr; gap: 2.5rem; align-items: center; padding: .6rem 0 .4rem; }
+.story-copy h3 { font-size: 1.55rem !important; line-height: 1.25; letter-spacing: -.025em; padding: 0; margin: 0 0 .7rem; max-width: 26ch; }
+.story-copy p { color: var(--muted); font-size: .9rem; line-height: 1.6; margin: .5rem 0; max-width: 48ch; }
+.story-comparison { margin: 0; padding: 1.25rem 1.4rem; background: #edf3ef; border-radius: 10px; }
+.story-row + .story-row { margin-top: 1.1rem; }
+.story-row-label { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; color: var(--ink); font-size: .85rem; margin-bottom: .45rem; }
+.story-row-label strong { font-size: 1.15rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.story-track { height: 15px; border-left: 1px solid var(--ink); }
+.story-bar { display: block; height: 100%; border-radius: 0 3px 3px 0; }
+.story-bar--average { background: var(--ink); }
+.story-bar--typical { background: var(--accent); }
+.story-bar--spike { background: repeating-linear-gradient(135deg, #a84e1c 0, #a84e1c 5px, #873e16 5px, #873e16 7px); }
+.story-axis { display: flex; justify-content: space-between; color: var(--muted); font-size: .72rem; padding-top: .55rem; border-top: 1px solid #cad8d0; margin-top: .8rem; }
+.story-comparison figcaption { color: var(--muted); font-size: .76rem; line-height: 1.55; margin-top: .8rem; }
 @media (max-width: 767px) {
   [data-testid="stMainBlockContainer"] { padding: 3.8rem 1rem 1.6rem; }
   .masthead h1 { font-size: 2rem; }
   .coverage { gap: .35rem .8rem; }
   [data-testid="stMetric"] { min-height: 92px; padding: .75rem 1rem; }
   .notes { grid-template-columns: 1fr; }
+  .price-story { grid-template-columns: 1fr; gap: .75rem; }
+  .story-comparison { padding: 1rem; }
+  .story-copy h3 { font-size: 1.35rem !important; }
 }

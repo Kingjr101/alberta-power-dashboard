@@ -6,6 +6,7 @@ import pytest
 
 from src.analysis import filter_dates, insights, patterns, prepare, relationship, spikes, summary
 from src.analysis import daily_market, demand_bands, monthly_spikes, price_duration
+from src.analysis import price_story
 
 
 @pytest.fixture
@@ -48,6 +49,17 @@ def test_empty_data(sample):
     assert summary(empty)["spike_percent"] == 0
     assert insights(empty) == []
     assert np.isnan(relationship(empty)[0])
+
+
+def test_price_story_threshold_and_empty_comparison(sample):
+    result = price_story(sample)
+    assert result['mean'] == 375
+    assert result['median'] == 375
+    assert result['without_spikes'] == 250  # Exactly $500 is not a spike.
+    assert result['ordinary_hours'] == 3
+    assert result['spike_percent'] == 25
+    assert np.isnan(price_story(sample.iloc[3:])['without_spikes'])
+    assert price_story(sample.iloc[:3])['spike_hours'] == 0
 
 
 def test_demand_bands_preserve_ties_and_denominators(sample):

@@ -7,6 +7,9 @@ from streamlit.testing.v1 import AppTest
 
 def test_pages_and_filters():
     app = AppTest.from_file(Path(__file__).resolve().parents[1] / "app.py", default_timeout=30).run()
+    app.radio(key="story_lens").set_value("Spike influence").run()
+    assert not app.exception
+    app.radio(key="story_lens").set_value("Typical prices").run()
     for page in ["Overview", "Price vs. load", "Patterns", "Price spikes"]:
         app.sidebar.radio[0].set_value(page).run()
         assert not app.exception, [error.message for error in app.exception]
