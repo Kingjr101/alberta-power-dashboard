@@ -1,0 +1,13 @@
+{
+  "source": "AESO Pool Price Report and Actual Forecast Report (actual AIL)",
+  "endpoints": [
+    "https://apimgw.aeso.ca/public/poolprice-api/v1.1/price/poolPrice",
+    "https://apimgw.aeso.ca/public/actualforecast-api/v1/load/albertaInternalLoad"
+  ],
+  "retrieved_at_utc": "2026-10-12T19:15:34.259342+00:00",
+  "start_date": "2024-01-01",
+  "end_date": "2025-12-31",
+  "rows": 17544,
+  "missing_hours": 0,
+  "sha256": "f74763c2eca7d8ca43befda2d7f869929f9658e0ec64ed0749b6ccd422693a61"
+}
